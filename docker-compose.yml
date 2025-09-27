@@ -1,0 +1,36 @@
+name: golf-bag-builder
+
+services:
+  backend:
+    container_name: "golf-bag-builder-backend"
+    image: "ghcr.io/tom0794/golf-bag-builder-backend:latest"
+    pull_policy: always
+    ports:
+      - "8081:8080"
+    environment:
+      - "FRONTEND_URL=http://localhost:8080"
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:8081"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      start_interval: 5s
+
+  frontend:
+    container_name: "golf-bag-builder-frontend"
+    image: "ghcr.io/tom0794/golf-bag-builder-frontend:latest"
+    pull_policy: always
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    environment:
+      - "BACKEND_URL=http://localhost:8081"
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:8080"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      start_interval: 5s

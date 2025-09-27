@@ -1,0 +1,36 @@
+name: Publish golf-bag-builder docker compose
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  packages: write
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print github context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Publish docker compose files to ghcr.io
+        shell: bash
+        run: |
+          docker login ghcr.io -u ${{ github.triggering_actor }}$ --password ${{ secrets.GITHUB_TOKEN }}
+          docker compose publish ghcr.io/tom0794/golf-bag-builder/compose:latest
+          docker compose -f docker-compose-versioned.yml publish ghcr.io/tom0794/golf-bag-builder/compose:${{ github.ref_name }}
+
+      - name: Update release description
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sed -i 's/GITHUB_RELEASE/${{ github.ref_name }}/g' RELEASE_NOTES.md
+          gh release edit ${{ github.ref_name }} --notes-file RELEASE_NOTES.md
