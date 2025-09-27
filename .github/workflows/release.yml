@@ -24,8 +24,8 @@ jobs:
         shell: bash
         run: |
           docker login ghcr.io -u ${{ github.triggering_actor }} --password ${{ secrets.GITHUB_TOKEN }}
-          docker compose publish --with-env ghcr.io/tom0794/golf-bag-builder/compose:latest
-          docker compose -f docker-compose-versioned.yml publish --with-env ghcr.io/tom0794/golf-bag-builder/compose:${{ github.ref_name }}
+          docker compose publish --with-env --yes ghcr.io/tom0794/golf-bag-builder/compose:latest
+          docker compose -f docker-compose-versioned.yml publish --with-env --yes ghcr.io/tom0794/golf-bag-builder/compose:${{ github.ref_name }}
 
       - name: Update release description
         shell: bash
