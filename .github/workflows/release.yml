@@ -23,9 +23,9 @@ jobs:
       - name: Publish docker compose files to ghcr.io
         shell: bash
         run: |
-          docker login ghcr.io -u ${{ github.triggering_actor }}$ --password ${{ secrets.GITHUB_TOKEN }}
-          docker compose publish ghcr.io/tom0794/golf-bag-builder/compose:latest
-          docker compose -f docker-compose-versioned.yml publish ghcr.io/tom0794/golf-bag-builder/compose:${{ github.ref_name }}
+          docker login ghcr.io -u ${{ github.triggering_actor }} --password ${{ secrets.GITHUB_TOKEN }}
+          docker compose publish --with-env ghcr.io/tom0794/golf-bag-builder/compose:latest
+          docker compose -f docker-compose-versioned.yml publish --with-env ghcr.io/tom0794/golf-bag-builder/compose:${{ github.ref_name }}
 
       - name: Update release description
         shell: bash
@@ -33,4 +33,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           sed -i 's/GITHUB_RELEASE/${{ github.ref_name }}/g' RELEASE_NOTES.md
+          cat RELEASE_NOTES.md
           gh release edit ${{ github.ref_name }} --notes-file RELEASE_NOTES.md
