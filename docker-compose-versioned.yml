@@ -3,7 +3,7 @@ name: golf-bag-builder
 services:
   backend:
     container_name: "golf-bag-builder-backend"
-    image: "ghcr.io/tom0794/golf-bag-builder-backend:0.1.0"
+    image: "ghcr.io/tom0794/golf-bag-builder-backend:0.1.1"
     pull_policy: always
     ports:
       - "8081:8080"
