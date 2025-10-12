@@ -10,12 +10,12 @@ services:
     environment:
       - "FRONTEND_URL=http://localhost:8080"
     healthcheck:
-      test: ["CMD", "curl", "http://localhost:8081"]
-      interval: 1m30s
+      test: ["CMD", "java", "-cp", "/", "HealthCheck"]
+      interval: 5m
       timeout: 10s
       retries: 3
       start_period: 40s
-      start_interval: 5s
+      start_interval: 3s
 
   frontend:
     container_name: "golf-bag-builder-frontend"
@@ -27,10 +27,3 @@ services:
       - "8080:80"
     environment:
       - "BACKEND_URL=http://localhost:8081"
-    healthcheck:
-      test: ["CMD", "curl", "http://localhost:8080"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-      start_interval: 5s
